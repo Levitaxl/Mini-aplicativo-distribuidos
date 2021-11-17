@@ -36,43 +36,48 @@ public class ClienteUDP {
             DatagramSocket socketUDP = new DatagramSocket();
             
             Scanner entrada = new Scanner(System.in);
-            String nombre= entrada.nextLine();
-
-            
-
+            String nombre= "";
+            nombre= entrada.nextLine().trim();
             String mensaje = "helloiam "+nombre;
-            System.out.println(mensaje);
-            //Convierto el mensaje a bytes
-           // buffer = new byte[1024];
             buffer = mensaje.getBytes();
 
-            //Creo un datagrama
+            
             DatagramPacket pregunta = new DatagramPacket(buffer, buffer.length, direccionServidor, PUERTO_SERVIDOR);
 
-            //Lo envio con send
-            System.out.println("Envio el datagrama");
+           
+            System.out.println("Envio el datagrama  "+mensaje);
             socketUDP.send(pregunta);
 
-            //Preparo la respuesta
+     
             buffer = new byte[1024];
             DatagramPacket peticion = new DatagramPacket(buffer, buffer.length);
 
-            //Recibo la respuesta
+
             socketUDP.receive(peticion);
             System.out.println("Recibo la peticion");
 
-            //Cojo los datos y lo muestro
+
             mensaje = new String(peticion.getData());
-            System.out.println(mensaje);
+            System.out.println("La respuesta del server es"+ mensaje);
             
              if(mensaje.equals("Usuario inexistente")) {
                     System.out.println("Socket Cerrado");
-                    socketUDP.close();
+                   // socketUDP.close();
+             }
+             else{
+                mensaje=nombre;
+             
+                buffer = mensaje.getBytes();
+                pregunta = new DatagramPacket(buffer, buffer.length, direccionServidor, PUERTO_SERVIDOR);
+
+                System.out.println("Envio el datagrama de nuevo");
+                socketUDP.send(pregunta);
+                //socketUDP.close();
+             
+      
              }
              
-
-            //cierro el socket
-            //socketUDP.close();
+             socketUDP.close();
 
         } catch (SocketException ex) {
             Logger.getLogger(ClienteUDP.class.getName()).log(Level.SEVERE, null, ex);

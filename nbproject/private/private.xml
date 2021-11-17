@@ -3,9 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/herme/Documents/NetBeansProjects/Cliente/src/mini_aplicativo/Cliente.java</file>
-            <file>file:/C:/Users/herme/Documents/NetBeansProjects/Cliente/src/mini_aplicativo/Servidor.java</file>
-            <file>file:/C:/Users/herme/Documents/NetBeansProjects/Cliente/src/mini_aplicativo/Log.java</file>
+            <file>file:/C:/Users/herme/Documents/NetBeansProjects/Cliente/src/mini_aplicativo/ClienteTCP.java</file>
+            <file>file:/C:/Users/herme/Documents/NetBeansProjects/Cliente/src/mini_aplicativo/ServidorTCP.java</file>
+            <file>file:/C:/Users/herme/Documents/NetBeansProjects/Cliente/src/mini_aplicativo/ClienteUDP.java</file>
+            <file>file:/C:/Users/herme/Documents/NetBeansProjects/Cliente/src/mini_aplicativo/ServidorUDP.java</file>
         </group>
     </open-files>
 </project-private>
