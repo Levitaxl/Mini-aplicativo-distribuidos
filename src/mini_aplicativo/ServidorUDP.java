@@ -5,6 +5,8 @@
  */
 package mini_aplicativo;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -41,15 +43,15 @@ public class ServidorUDP {
                 
                 //Convierto lo recibido y mostrar el mensaje
                 String mensaje = new String(peticion.getData());
-                System.out.println(mensaje);
+                String respuesta2= leetTxt(mensaje.trim());
 
+           
                 //Obtengo el puerto y la direccion de origen
                 //Sino se quiere responder, no es necesario
                 int puertoCliente = peticion.getPort();
                 InetAddress direccion = peticion.getAddress();
-
-                mensaje = "ok";
-                buffer = mensaje.getBytes();
+                
+                buffer = respuesta2.getBytes();
 
                 //creo el datagrama
                 DatagramPacket respuesta = new DatagramPacket(buffer, buffer.length, direccion, puertoCliente);
@@ -68,6 +70,22 @@ public class ServidorUDP {
 
     }
 
+     private static String leetTxt(String nombre) throws IOException{
+        Log myLog = new Log("./log.txt");
+        try {
+            BufferedReader bf = new BufferedReader(new FileReader("C:\\Users\\herme\\Documents\\NetBeansProjects\\Cliente\\usuarios.txt"));
+            String bfRead;
+            while(((bfRead= bf.readLine()) !=null)){
+                System.out.println("helloiam "+bfRead+nombre);
+                if(nombre.equalsIgnoreCase("helloiam "+bfRead) || (bfRead == nombre)) 
+                    return "ok";
+            }
+        } catch (Exception e) { System.out.println("No se encontro el archivo");
+        }
+         myLog.addLine("Usuario inexistente");
+        return "Usuario inexistente";
+     
+    }
     
 
 }

@@ -40,9 +40,10 @@ public class ClienteUDP {
 
             
 
-            String mensaje = nombre;
-
+            String mensaje = "helloiam "+nombre;
+            System.out.println(mensaje);
             //Convierto el mensaje a bytes
+           // buffer = new byte[1024];
             buffer = mensaje.getBytes();
 
             //Creo un datagrama
@@ -53,6 +54,7 @@ public class ClienteUDP {
             socketUDP.send(pregunta);
 
             //Preparo la respuesta
+            buffer = new byte[1024];
             DatagramPacket peticion = new DatagramPacket(buffer, buffer.length);
 
             //Recibo la respuesta
@@ -62,9 +64,15 @@ public class ClienteUDP {
             //Cojo los datos y lo muestro
             mensaje = new String(peticion.getData());
             System.out.println(mensaje);
+            
+             if(mensaje.equals("Usuario inexistente")) {
+                    System.out.println("Socket Cerrado");
+                    socketUDP.close();
+             }
+             
 
             //cierro el socket
-            socketUDP.close();
+            //socketUDP.close();
 
         } catch (SocketException ex) {
             Logger.getLogger(ClienteUDP.class.getName()).log(Level.SEVERE, null, ex);
