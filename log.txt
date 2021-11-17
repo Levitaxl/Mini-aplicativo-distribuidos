@@ -1,0 +1,31 @@
+[16/11/2021 20:21:24] Linea 1
+[16/11/2021 20:21:24] Linea 2
+[16/11/2021 20:21:24] Linea 3
+[16/11/2021 20:21:24] Linea 4
+[16/11/2021 20:21:24] Linea 5
+[16/11/2021 20:21:38] Linea 1
+[16/11/2021 20:21:38] Linea 2
+[16/11/2021 20:21:38] Linea 3
+[16/11/2021 20:21:38] Linea 4
+[16/11/2021 20:21:38] Linea 5
+[16/11/2021 20:30:13] Linea 1
+[16/11/2021 20:30:13] Linea 2
+[16/11/2021 20:30:13] Linea 3
+[16/11/2021 20:30:13] Linea 4
+[16/11/2021 20:30:13] Linea 5
+[16/11/2021 20:30:20] error
+[16/11/2021 20:34:55] Usuario inexistente
+[16/11/2021 20:35:42] Usuario inexistente
+[16/11/2021 20:36:33] Usuario inexistente
+[16/11/2021 20:37:10] Usuario inexistente
+[16/11/2021 20:37:45] Usuario inexistente
+[16/11/2021 21:17:13] Africano 192.168.56.1 TCP
+[16/11/2021 21:17:51] Usuario inexistente
+[16/11/2021 21:19:10] Usuario inexistente
+[16/11/2021 21:21:31] Usuario inexistente
+[16/11/2021 21:22:39] Usuario inexistente
+[16/11/2021 21:23:19] Usuario inexistente
+[16/11/2021 21:23:56] Usuario inexistente
+[16/11/2021 21:24:09] Africano 192.168.56.1 TCP
+[16/11/2021 21:32:04] Africano 192.168.56.1 TCP
+[16/11/2021 21:32:29] Aloisi 192.168.56.1 TCP

@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cliente;
+package mini_aplicativo;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
-import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -18,14 +18,12 @@ import java.net.Socket;
  *
  * @author herme
  */
-public class Servidor {
+public class ServidorTCP {
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws IOException {
-        
-        // TODO code application logic here
+    public static void main(String[] args) throws IOException {       
         ServerSocket servidor=null;
         Socket socket=null;
         DataInputStream in;
@@ -39,30 +37,42 @@ public class Servidor {
                in = new DataInputStream(socket.getInputStream());
                out = new DataOutputStream(socket.getOutputStream());
                
-               String nombre = in.readUTF();
-               String respuesta= leetTxt(nombre);
-               
-               out.writeUTF(respuesta);
-               socket.close();
-               
-               System.out.println("Cliente desconectado");
+                String nombre = in.readUTF();
+                String respuesta= leetTxt(nombre);
+                out.writeUTF(respuesta);
+                
+                if(respuesta.equals("Usuario inexistente"))socket.close();
+                        
+                else{
+                    nombre = in.readUTF();
+                    String ip = InetAddress.getLocalHost().getHostAddress();   
+                    saveLog(nombre,ip,"TCP");
+                    socket.close(); 
+               }
            }
         
         
     }
     
     
-    private static String leetTxt(String nombre){
+    private static void saveLog(String nombre, String ip, String protocolo) throws IOException{
+        Log myLog = new Log("./log.txt");
+        myLog.addLine(nombre+" "+ip+" "+protocolo);
+    }
+    
+    private static String leetTxt(String nombre) throws IOException{
+        Log myLog = new Log("./log.txt");
         try {
             BufferedReader bf = new BufferedReader(new FileReader("C:\\Users\\herme\\Documents\\NetBeansProjects\\Cliente\\usuarios.txt"));
             String bfRead;
             while(((bfRead= bf.readLine()) !=null)){
-                if(bfRead.equals(nombre)) 
+                if(nombre.equals("helloiam "+bfRead)) 
                     return "ok";
             }
         } catch (Exception e) { System.out.println("No se encontro el archivo");
         }
-        return "error";
+         myLog.addLine("Usuario inexistente");
+        return "Usuario inexistente";
      
     }
     
