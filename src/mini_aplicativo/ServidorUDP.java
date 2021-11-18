@@ -13,6 +13,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,60 +23,39 @@ import java.util.logging.Logger;
  */
 public class ServidorUDP {
 
-     public static void main(String[] args) {
+     public static void main(String[] args) throws UnknownHostException {
 
         final int PUERTO = 5000;
-        byte[] buffer = new byte[1024];
+        String ip = InetAddress.getLocalHost().getHostAddress();  
+        int puertoCliente;
+        InetAddress direccion;
+        String respuesta_txt;
+        DatagramSocket socketUDP;
 
         try {
             System.out.println("Iniciado el servidor UDP");
-            DatagramSocket socketUDP = new DatagramSocket(PUERTO);
+            socketUDP = new DatagramSocket(PUERTO);
             
             while (true) {
-                DatagramPacket peticion = new DatagramPacket(buffer, buffer.length);
-                socketUDP.receive(peticion);
-                System.out.println("Recibo la informacion del cliente");
+                DatagramPacket peticion = createDatagramPacket();
                 
+                String mensaje = ReceiveData(socketUDP, peticion);
+        
+                puertoCliente = peticion.getPort();
+                direccion = peticion.getAddress();
                 
-                String mensaje = new String(peticion.getData(), peticion.getOffset(), peticion.getLength());
-                System.out.println("El mensaje es "+ mensaje);
+                respuesta_txt= leetTxt(mensaje.trim());
+                SendData(respuesta_txt, socketUDP, direccion, puertoCliente);
                 
+                if(respuesta_txt.equals("Usuario inexistente")) System.out.println("El usuario "+respuesta_txt+" Se encuentra inexistente");
                 
-                String respuesta2= leetTxt(mensaje.trim());
-                int puertoCliente = peticion.getPort();
-                InetAddress direccion = peticion.getAddress();
-                byte[]  buffer2= new byte[1024];
-                buffer2 = respuesta2.getBytes();
-                DatagramPacket respuesta = new DatagramPacket(buffer2, buffer2.length, direccion, puertoCliente);
-
-               // System.out.println("Envio la informacion al cliente");
-                
-                socketUDP.send(respuesta);
-                
-               // System.out.println("La respuesta de la busqueda en el archivo es"+ respuesta2);
-                if(respuesta2.equals("Usuario inexistente")){
-                    //socketUDP.close(); 
-                //  System.out.println("El usuario "+respuesta2+" Se encuentra inexistente");
-                }
-                
-                else if(respuesta2.equals("ok")){    
-                  //  System.out.println("El usuario "+respuesta2+" Si se encuentra");
-                    byte[]  buffer3 = new byte[1024];
-                    DatagramPacket peticion2 = new DatagramPacket(buffer3, buffer3.length);
-                    socketUDP.receive(peticion2);
- 
-                     
-                    mensaje = new String(peticion2.getData(), peticion2.getOffset(), peticion2.getLength());
-                      
-                    String ip = InetAddress.getLocalHost().getHostAddress();   
-                    saveLog(mensaje,ip,"UDP");
-                    //socketUDP.close(); 
-                
+                else if(respuesta_txt.equals("ok")){    
+                    DatagramPacket peticion2 = createDatagramPacket();
+                    mensaje = ReceiveData(socketUDP, peticion2);
+                    
+                    saveLog(mensaje,ip,"UDP");                
                     System.out.println("Segundo mensaje"+ mensaje);
                 }
-                
-               //socketUDP.close();
-                
             }
 
         } catch (SocketException ex) {
@@ -88,26 +68,37 @@ public class ServidorUDP {
 
      private static String leetTxt(String nombre) throws IOException{
         Log myLog = new Log("./log.txt");
-       // System.out.println(nombre);
         try {
             BufferedReader bf = new BufferedReader(new FileReader("C:\\Users\\herme\\Documents\\NetBeansProjects\\Cliente\\usuarios.txt"));
             String bfRead;
             while(((bfRead= bf.readLine()) !=null)){
-              // System.out.println("helloiam "+bfRead);
                 if(nombre.equalsIgnoreCase("helloiam "+bfRead)) 
                     return "ok";
             }
-        } catch (Exception e) { System.out.println("No se encontro el archivo");
-        }
-         myLog.addLine("Usuario inexistente");
+        } 
+        catch (Exception e) { System.out.println("No se encontro el archivo");}
+        myLog.addLine("Usuario inexistente");
         return "Usuario inexistente";
-     
     }
-    
-
      
-     private static void saveLog(String nombre, String ip, String protocolo) throws IOException{
+    private static void saveLog(String nombre, String ip, String protocolo) throws IOException{
         Log myLog = new Log("./log.txt");
         myLog.addLine(nombre.trim()+" "+ip.trim()+" "+protocolo.trim());
+    }
+     
+    private static String ReceiveData(DatagramSocket socketUDP,DatagramPacket peticion) throws IOException{
+        socketUDP.receive(peticion);
+        return new String(peticion.getData(), peticion.getOffset(), peticion.getLength());
+    }
+    
+     private static void SendData(String data, DatagramSocket socketUDP, InetAddress direccionServidor,int PUERTO_SERVIDOR) throws IOException {
+        byte[]  buffer = data.getBytes();
+        DatagramPacket paquete_nombre = new DatagramPacket(buffer, buffer.length, direccionServidor, PUERTO_SERVIDOR);
+        socketUDP.send(paquete_nombre);
+    }
+     
+    private static  DatagramPacket createDatagramPacket(){
+        byte[]  buffer = new byte[1024];
+        return new DatagramPacket(buffer, buffer.length);
     }
 }
