@@ -25,63 +25,26 @@ public class ClienteUDP {
 
         //puerto del servidor
         final int PUERTO_SERVIDOR = 5000;
-        //buffer donde se almacenara los mensajes
-        byte[] buffer = new byte[1024];
-
         try {
-            //Obtengo la localizacion de localhost
             InetAddress direccionServidor = InetAddress.getByName("localhost");
-
-            //Creo el socket de UDP
             DatagramSocket socketUDP = new DatagramSocket();
             
             Scanner entrada = new Scanner(System.in);
-            String nombre= "";
-            nombre= entrada.nextLine().trim();
-            String mensaje = "helloiam "+nombre;
-            byte[]  buffer4 = mensaje.getBytes();
-
+            String nombre= "helloiam "+ entrada.nextLine().trim();
             
-            DatagramPacket pregunta = new DatagramPacket(buffer4, buffer4.length, direccionServidor, PUERTO_SERVIDOR);
-
-           
-           // System.out.println("Envio el datagrama  "+mensaje);
-            socketUDP.send(pregunta);
-
-     
-           byte[] buffer_2 = new byte[1024];
-            DatagramPacket peticion = new DatagramPacket(buffer_2, buffer_2.length);
-
-
-            socketUDP.receive(peticion);
-            System.out.println("Recibo la peticion");
-
-
-            mensaje = new String(peticion.getData(), peticion.getOffset(), peticion.getLength());
-            System.out.println("La respuesta del server es"+ mensaje);
+            SendData(nombre,socketUDP,direccionServidor,PUERTO_SERVIDOR);
+            String mensaje_peticion = ReceiveData(socketUDP);
             
-             if(mensaje.equals("Usuario inexistente")) {
-                    System.out.println("Socket Cerrado");
-                    //socketUDP.close();
-             }
-             else if(mensaje.equals("ok")){
-                
-                 mensaje=nombre;
-             
-                byte[] buffer3 = mensaje.getBytes();
-                pregunta = new DatagramPacket(buffer3, buffer3.length, direccionServidor, PUERTO_SERVIDOR);
-
-            //    System.out.println("Envio el datagrama de nuevo");
-                
+            
+            //Comparacion si la peticion fue la esperada
+            if(mensaje_peticion.equals("Usuario inexistente")) System.out.println("Usuario inexistente");
+            else if(mensaje_peticion.equals("ok")){
+                String mensaje= entrada.nextLine().trim();
                 System.out.println("Se envia el mensaje "+mensaje);
-            
-                socketUDP.send(pregunta);
-                //socketUDP.close();
-             
-      
-             }
-             
-             socketUDP.close();
+                SendData(mensaje,socketUDP,direccionServidor,PUERTO_SERVIDOR);
+            }
+            System.out.println("Socket Cerrado");
+            socketUDP.close();
 
         } catch (SocketException ex) {
             Logger.getLogger(ClienteUDP.class.getName()).log(Level.SEVERE, null, ex);
@@ -91,5 +54,19 @@ public class ClienteUDP {
             Logger.getLogger(ClienteUDP.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+    
+    private static void SendData(String data, DatagramSocket socketUDP, InetAddress direccionServidor,int PUERTO_SERVIDOR) throws IOException {
+        byte[]  buffer = data.getBytes();
+        DatagramPacket paquete_nombre = new DatagramPacket(buffer, buffer.length, direccionServidor, PUERTO_SERVIDOR);
+        socketUDP.send(paquete_nombre);
+    }
+    
+    
+    private static String ReceiveData(DatagramSocket socketUDP) throws IOException{
+        byte[] buffer = new byte[1024];
+        DatagramPacket peticion = new DatagramPacket(buffer, buffer.length);
+        socketUDP.receive(peticion);
+        return new String(peticion.getData(), peticion.getOffset(), peticion.getLength());
     }
 }
