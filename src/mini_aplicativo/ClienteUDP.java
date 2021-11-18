@@ -39,38 +39,42 @@ public class ClienteUDP {
             String nombre= "";
             nombre= entrada.nextLine().trim();
             String mensaje = "helloiam "+nombre;
-            buffer = mensaje.getBytes();
+            byte[]  buffer4 = mensaje.getBytes();
 
             
-            DatagramPacket pregunta = new DatagramPacket(buffer, buffer.length, direccionServidor, PUERTO_SERVIDOR);
+            DatagramPacket pregunta = new DatagramPacket(buffer4, buffer4.length, direccionServidor, PUERTO_SERVIDOR);
 
            
-            System.out.println("Envio el datagrama  "+mensaje);
+           // System.out.println("Envio el datagrama  "+mensaje);
             socketUDP.send(pregunta);
 
      
-            buffer = new byte[1024];
-            DatagramPacket peticion = new DatagramPacket(buffer, buffer.length);
+           byte[] buffer_2 = new byte[1024];
+            DatagramPacket peticion = new DatagramPacket(buffer_2, buffer_2.length);
 
 
             socketUDP.receive(peticion);
             System.out.println("Recibo la peticion");
 
 
-            mensaje = new String(peticion.getData());
+            mensaje = new String(peticion.getData(), peticion.getOffset(), peticion.getLength());
             System.out.println("La respuesta del server es"+ mensaje);
             
              if(mensaje.equals("Usuario inexistente")) {
                     System.out.println("Socket Cerrado");
-                   // socketUDP.close();
+                    //socketUDP.close();
              }
-             else{
-                mensaje=nombre;
+             else if(mensaje.equals("ok")){
+                
+                 mensaje=nombre;
              
-                buffer = mensaje.getBytes();
-                pregunta = new DatagramPacket(buffer, buffer.length, direccionServidor, PUERTO_SERVIDOR);
+                byte[] buffer3 = mensaje.getBytes();
+                pregunta = new DatagramPacket(buffer3, buffer3.length, direccionServidor, PUERTO_SERVIDOR);
 
-                System.out.println("Envio el datagrama de nuevo");
+            //    System.out.println("Envio el datagrama de nuevo");
+                
+                System.out.println("Se envia el mensaje "+mensaje);
+            
                 socketUDP.send(pregunta);
                 //socketUDP.close();
              

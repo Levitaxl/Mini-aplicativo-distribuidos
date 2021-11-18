@@ -37,33 +37,35 @@ public class ServidorUDP {
                 System.out.println("Recibo la informacion del cliente");
                 
                 
-                String mensaje = new String(peticion.getData());
+                String mensaje = new String(peticion.getData(), peticion.getOffset(), peticion.getLength());
                 System.out.println("El mensaje es "+ mensaje);
                 
                 
                 String respuesta2= leetTxt(mensaje.trim());
                 int puertoCliente = peticion.getPort();
                 InetAddress direccion = peticion.getAddress();
-                buffer = new byte[1024];
-                buffer = respuesta2.getBytes();
-                DatagramPacket respuesta = new DatagramPacket(buffer, buffer.length, direccion, puertoCliente);
+                byte[]  buffer2= new byte[1024];
+                buffer2 = respuesta2.getBytes();
+                DatagramPacket respuesta = new DatagramPacket(buffer2, buffer2.length, direccion, puertoCliente);
 
-                System.out.println("Envio la informacion al cliente");
+               // System.out.println("Envio la informacion al cliente");
                 
                 socketUDP.send(respuesta);
                 
-  
+               // System.out.println("La respuesta de la busqueda en el archivo es"+ respuesta2);
                 if(respuesta2.equals("Usuario inexistente")){
-                  System.out.println("El usuario "+respuesta2+" Se encuentra inexistente");
+                    //socketUDP.close(); 
+                //  System.out.println("El usuario "+respuesta2+" Se encuentra inexistente");
                 }
                 
-                else{    
-                    System.out.println("El usuario "+respuesta2+" Si se encuentra");
-                    buffer = new byte[1024];
-                    DatagramPacket peticion2 = new DatagramPacket(buffer, buffer.length);
+                else if(respuesta2.equals("ok")){    
+                  //  System.out.println("El usuario "+respuesta2+" Si se encuentra");
+                    byte[]  buffer3 = new byte[1024];
+                    DatagramPacket peticion2 = new DatagramPacket(buffer3, buffer3.length);
                     socketUDP.receive(peticion2);
+ 
                      
-                    mensaje = new String(peticion2.getData());
+                    mensaje = new String(peticion2.getData(), peticion2.getOffset(), peticion2.getLength());
                       
                     String ip = InetAddress.getLocalHost().getHostAddress();   
                     saveLog(mensaje,ip,"UDP");
@@ -72,7 +74,7 @@ public class ServidorUDP {
                     System.out.println("Segundo mensaje"+ mensaje);
                 }
                 
-                //socketUDP.close();
+               //socketUDP.close();
                 
             }
 
@@ -86,12 +88,12 @@ public class ServidorUDP {
 
      private static String leetTxt(String nombre) throws IOException{
         Log myLog = new Log("./log.txt");
-        System.out.println(nombre);
+       // System.out.println(nombre);
         try {
             BufferedReader bf = new BufferedReader(new FileReader("C:\\Users\\herme\\Documents\\NetBeansProjects\\Cliente\\usuarios.txt"));
             String bfRead;
             while(((bfRead= bf.readLine()) !=null)){
-               System.out.println("helloiam "+bfRead);
+              // System.out.println("helloiam "+bfRead);
                 if(nombre.equalsIgnoreCase("helloiam "+bfRead)) 
                     return "ok";
             }
