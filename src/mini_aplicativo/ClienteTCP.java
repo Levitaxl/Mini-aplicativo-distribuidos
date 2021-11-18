@@ -16,7 +16,7 @@ import java.util.Scanner;
  * @author herme
  */
 public class ClienteTCP {
-    public static void main(String[] args) throws IOException {
+    public void invoke() throws IOException {
         final String HOST="127.0.0.1";
         final int PUERTO=19876;
         
@@ -28,8 +28,10 @@ public class ClienteTCP {
         out = new DataOutputStream(sc.getOutputStream());
          
         
-        Scanner entrada = new Scanner(System.in);
+        Scanner entrada = new Scanner(System.in,"ISO-8859-1");
         String nombre= entrada.nextLine();
+        
+        System.out.println(nombre);
         
         out.writeUTF("helloiam "+nombre);
         
@@ -40,7 +42,8 @@ public class ClienteTCP {
             sc.close();}
         
         else if(mensaje.equals("ok")){
-            out.writeUTF(nombre);
+            mensaje= entrada.nextLine();
+            out.writeUTF(mensaje);
         }
     }
 }

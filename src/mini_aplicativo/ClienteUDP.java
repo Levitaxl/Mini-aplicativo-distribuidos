@@ -21,7 +21,7 @@ import java.util.logging.Logger;
  */
 public class ClienteUDP {
     
-    public static void main(String[] args) {
+    public void invoke() {
 
         //puerto del servidor
         final int PUERTO_SERVIDOR = 5000;
@@ -29,14 +29,12 @@ public class ClienteUDP {
             InetAddress direccionServidor = InetAddress.getByName("localhost");
             DatagramSocket socketUDP = new DatagramSocket();
             
-            Scanner entrada = new Scanner(System.in);
+            Scanner entrada = new Scanner(System.in,"ISO-8859-1");
             String nombre= "helloiam "+ entrada.nextLine().trim();
             
             SendData(nombre,socketUDP,direccionServidor,PUERTO_SERVIDOR);
             String mensaje_peticion = ReceiveData(socketUDP);
             
-            
-            //Comparacion si la peticion fue la esperada
             if(mensaje_peticion.equals("Usuario inexistente")) System.out.println("Usuario inexistente");
             else if(mensaje_peticion.equals("ok")){
                 String mensaje= entrada.nextLine().trim();
