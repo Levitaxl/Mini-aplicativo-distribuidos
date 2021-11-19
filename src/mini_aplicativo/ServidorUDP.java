@@ -5,7 +5,7 @@
  */
 package mini_aplicativo;
 
-import java.awt.BorderLayout;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -25,7 +25,7 @@ public class ServidorUDP {
 
      public static void main(String[] args) throws UnknownHostException {
 
-        final int PUERTO = 5000;
+        final int PUERTO = 19876;
         String ip = InetAddress.getLocalHost().getHostAddress();  
         int puertoCliente;
         InetAddress direccion;

@@ -24,7 +24,7 @@ public class ClienteUDP {
     public void invoke() {
 
         //puerto del servidor
-        final int PUERTO_SERVIDOR = 5000;
+        final int PUERTO_SERVIDOR = 19876;
         try {
             InetAddress direccionServidor = InetAddress.getByName("localhost");
             DatagramSocket socketUDP = new DatagramSocket();

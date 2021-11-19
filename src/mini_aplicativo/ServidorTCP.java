@@ -28,7 +28,7 @@ public class ServidorTCP {
         Socket socket=null;
         DataInputStream in;
         DataOutputStream out;
-        final int PUERTO=19876;
+        final int PUERTO=19877;
             
         servidor= new ServerSocket(PUERTO);
         System.out.println("Servidor iniciado");

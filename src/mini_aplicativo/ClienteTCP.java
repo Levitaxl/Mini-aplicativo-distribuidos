@@ -18,7 +18,7 @@ import java.util.Scanner;
 public class ClienteTCP {
     public void invoke() throws IOException {
         final String HOST="127.0.0.1";
-        final int PUERTO=19876;
+        final int PUERTO=19877;
         
         DataInputStream in;
         DataOutputStream out;
