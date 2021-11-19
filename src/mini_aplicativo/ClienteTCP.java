@@ -31,19 +31,19 @@ public class ClienteTCP {
         Scanner entrada = new Scanner(System.in,"ISO-8859-1");
         String nombre= entrada.nextLine();
         
-        System.out.println(nombre);
-        
         out.writeUTF("helloiam "+nombre);
         
         String mensaje= in.readUTF();
         
         if(mensaje.equals("Usuario inexistente")) {
             System.out.println("Socket Cerrado");
-            sc.close();}
+           }
         
         else if(mensaje.equals("ok")){
             mensaje= entrada.nextLine();
             out.writeUTF(mensaje);
         }
+        
+         sc.close();
     }
 }
